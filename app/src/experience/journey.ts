@@ -1,23 +1,33 @@
 /* ============================================================
-   JORNADA
+   JORNADA · o hero inteiro
    Um só palco fixo. O scroll é medido em unidades de viewport
-   (j = scrollY / vh). A experiência inteira é um só mundo; os
-   "blocos" existem só para o índice da barra e para o debug.
-   Toda a coreografia usa P = j / JOURNEY_TOTAL (0–1).
+   (j = scrollY / vh). Os "beats" existem só para o índice da
+   barra e para o debug. Toda a coreografia usa P = j / JOURNEY_TOTAL.
    ============================================================ */
 
-export type BlockId = "entrada" | "descoberta" | "direction" | "tease";
+export type BlockId =
+  | "chegada"
+  | "entrada"
+  | "operacao"
+  | "capacidades"
+  | "sistema"
+  | "direcao"
+  | "build";
 
 export type Block = { id: BlockId; index: number; start: number; len: number };
 
+/** 9 viewports ≈ 30 s num scroll calmo (docs/GAVEA_BUILD2030_HERO_STORYBOARD_V2.md). */
 const LENS: Record<BlockId, number> = {
-  entrada: 2.0, // escuro, AERA apresenta, marca, câmera começa
-  descoberta: 3.2, // quatro áreas do sistema, conexões
-  direction: 1.6, // um vetor
-  tease: 1.2, // bifurcação
+  chegada: 1.26, // P 0–0.14
+  entrada: 1.44, // P 0.14–0.30
+  operacao: 1.8, // P 0.30–0.50
+  capacidades: 1.26, // P 0.50–0.64
+  sistema: 1.26, // P 0.64–0.78
+  direcao: 1.08, // P 0.78–0.90
+  build: 0.9, // P 0.90–1
 };
 
-const ORDER: BlockId[] = ["entrada", "descoberta", "direction", "tease"];
+const ORDER: BlockId[] = ["chegada", "entrada", "operacao", "capacidades", "sistema", "direcao", "build"];
 
 export const BLOCKS: Record<BlockId, Block> = (() => {
   let acc = 0;
@@ -29,27 +39,26 @@ export const BLOCKS: Record<BlockId, Block> = (() => {
   return out;
 })();
 
-/** Comprimento total da jornada em viewports (scroll máximo). */
 export const JOURNEY_TOTAL = ORDER.reduce((a, id) => a + LENS[id], 0);
 
-/** Altura do spacer: jornada + 1 viewport, para j alcançar JOURNEY_TOTAL. */
 export const SPACER_VH = (JOURNEY_TOTAL + 1) * 100;
 
-/** Progresso global 0–1. */
-export const progressOf = (j: number) =>
-  Math.min(1, Math.max(0, j / JOURNEY_TOTAL));
+export const progressOf = (j: number) => Math.min(1, Math.max(0, j / JOURNEY_TOTAL));
 
 export const activeBlock = (j: number): Block => {
   for (let i = ORDER.length - 1; i >= 0; i--) {
     const b = BLOCKS[ORDER[i]];
     if (j >= b.start) return b;
   }
-  return BLOCKS.entrada;
+  return BLOCKS.chegada;
 };
 
 export const BLOCK_LABELS: Record<BlockId, string> = {
-  entrada: "01 / Entrada",
-  descoberta: "02 / Sistema",
-  direction: "03 / Direction",
-  tease: "04 / Próxima fase",
+  chegada: "01 / Chegada",
+  entrada: "02 / Entrada",
+  operacao: "03 / Operação",
+  capacidades: "04 / Capacidades",
+  sistema: "05 / Sistema",
+  direcao: "06 / Direção",
+  build: "07 / BUILD 2030",
 };

@@ -13,6 +13,8 @@ import { progressOf } from "../journey";
  */
 export type WorldHandle = LayerHandle & {
   anchors: () => Anchor[];
+  /** frames renderizados (captura espera > 5) */
+  frames: () => number;
 };
 
 export const WorldLayer = forwardRef<WorldHandle, object>(function WorldLayer(
@@ -49,6 +51,7 @@ export const WorldLayer = forwardRef<WorldHandle, object>(function WorldLayer(
         anchors.current = w.anchors(s.vw, s.vh);
       },
       anchors: () => anchors.current,
+      frames: () => world.current?.readyFrames ?? 0,
       debug: () => world.current?.debug() ?? {},
     }),
     [],

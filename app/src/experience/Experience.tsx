@@ -15,11 +15,25 @@ import { DebugPanel } from "./DebugPanel";
  * Um palco fixo, um spacer alto, um loop. O mundo (WebGL) embaixo, as
  * anotações HTML por cima. A jornada é medida em viewports (`journey.ts`).
  *
- * Pré-roll: sem scroll, o tempo leva a entrada até o fim da marca (j ≈ 1.6);
+ * Pré-roll: sem scroll, o tempo leva a entrada até o fim da marca;
  * `max(j, jAuto)` garante que o scroll assume sem salto.
  *
- * `?debug=1` liga o painel. `?at=0.45` abre já em 45% da jornada (frames de revisão).
+ * Parâmetros de desenvolvimento (nunca em produção):
+ * `?debug=1` painel · `?at=0.45` abre em 45%
+ * `?capture=1` expõe `window.__b2030` para o script de captura.
  */
+type CaptureApi = {
+  ready: () => boolean;
+  goto: (P: number) => void;
+  play: (ms: number) => Promise<void>;
+};
+
+declare global {
+  interface Window {
+    __b2030?: CaptureApi;
+  }
+}
+
 export function Experience() {
   const world = useRef<WorldHandle | null>(null);
   const notes = useRef<LayerHandle | null>(null);
@@ -42,6 +56,28 @@ export function Experience() {
         const P = Math.min(1, Math.max(0, Number(at)));
         window.scrollTo(0, P * JOURNEY_TOTAL * window.innerHeight);
       }
+      if (params.get("capture") === "1") {
+        preroll.current = false;
+        window.__b2030 = {
+          ready: () => (world.current?.frames?.() ?? 0) > 5,
+          goto: (P) => {
+            window.scrollTo(0, Math.min(1, Math.max(0, P)) * JOURNEY_TOTAL * window.innerHeight);
+            scrollStore.invalidate();
+          },
+          play: (ms) =>
+            new Promise((resolve) => {
+              const max = JOURNEY_TOTAL * window.innerHeight;
+              const t0 = performance.now();
+              const step = (now: number) => {
+                const k = Math.min(1, (now - t0) / ms);
+                window.scrollTo(0, k * max);
+                if (k < 1) requestAnimationFrame(step);
+                else resolve();
+              };
+              requestAnimationFrame(step);
+            }),
+        };
+      }
     });
     window.addEventListener("resize", size);
     return () => {
@@ -56,7 +92,7 @@ export function Experience() {
       let j = s.j;
       if (preroll.current) {
         const tt = s.t - bootT.current;
-        const jAuto = 1.75 * seg(tt, 1400, 7000, EASE.cinematic);
+        const jAuto = 0.14 * JOURNEY_TOTAL * seg(tt, 1200, 7800, EASE.cinematic);
         if (s.j > 0.05) preroll.current = false;
         j = Math.max(j, jAuto);
       }

@@ -29,8 +29,8 @@ export const TopBar = forwardRef<LayerHandle, object>(function TopBar(
     () => ({
       tick(s: ScrollState) {
         const P = progressOf(s.j);
-        setOpacity(logo.current, seg(P, M.logoOut + 0.01, M.logoOut + 0.04));
-        setOpacity(right.current, seg(P, M.titleLabel, M.titleLabel + 0.04));
+        setOpacity(logo.current, seg(P, M.logoOut + 0.01, M.logoOut + 0.04) * (1 - seg(P, M.lockupIn - 0.02, M.lockupIn)));
+        setOpacity(right.current, seg(P, M.logoOut + 0.01, M.logoOut + 0.05));
         setTransform(progress.current, `scaleX(${Math.min(1, s.j / JOURNEY_TOTAL).toFixed(4)})`);
         const label = BLOCK_LABELS[activeBlock(s.j).id];
         if (label !== lastLabel.current && index.current) {
@@ -60,7 +60,7 @@ export const TopBar = forwardRef<LayerHandle, object>(function TopBar(
       >
         <EditorialLabel>AERA × GAVEA</EditorialLabel>
         <EditorialLabel tone="white">
-          <span ref={index}>01 / Entrada</span>
+          <span ref={index}>01 / Chegada</span>
         </EditorialLabel>
       </div>
     </div>

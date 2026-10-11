@@ -1,57 +1,66 @@
 /* ============================================================
-   MOMENTOS · a linha do tempo do mundo, em P (0–1 da jornada)
-   Um só lugar para todos os instantes. Câmera, luz, zonas,
-   trajetória e anotações leem daqui.
+   MOMENTOS · a linha do tempo do hero, em P (0–1)
+   Sete beats (docs/GAVEA_BUILD2030_HERO_STORYBOARD_V2.md).
+   Um só lugar para todos os instantes: câmera, luz, rotas,
+   labels e lockup leem daqui.
    ============================================================ */
 
 export const M = {
-  /** 01 · escuro. `AERA apresenta` entra e some. */
+  /** 01 · chegada */
   presentsIn: 0.012,
-  presentsHold: 0.07,
-  presentsOut: 0.1,
-  /** 02 · marca oficial, pequena/média, e some. */
-  logoIn: 0.105,
-  logoHold: 0.19,
-  logoOut: 0.225,
-  /** 03 · a câmera começa; a estrutura aparece; `GAVEA / BUILD 2030`. */
-  structureIn: 0.2,
-  titleLabel: 0.25,
-  /** 04–06 · áreas ativam, uma a uma; conexões se formam. */
-  zone: [0.37, 0.49, 0.6, 0.7] as const,
-  zoneRamp: 0.05,
-  /** 07 · tudo encontra um vetor. */
-  connectHeadIn: 0.74,
-  connectHeadOut: 0.84,
-  alignIn: 0.79,
-  alignOut: 0.9,
-  directionIn: 0.87,
-  /** hint · bifurcação. */
-  branchIn: 0.93,
-  branchFull: 0.985,
-  branchLabelA: 0.95,
-  branchLabelB: 0.97,
+  presentsHold: 0.05,
+  presentsOut: 0.065,
+  logoIn: 0.065,
+  logoHold: 0.115,
+  logoOut: 0.135,
+  buildIn: 0.09,
+  /** 03–04 · labels de capacidade (ver ZONES) */
+  labelRamp: 0.03,
+  labelsOut: 0.885,
+  /** 05 · a camada de sistema */
+  routesStart: 0.64,
+  routesEnd: 0.76,
+  pulses: 0.7,
+  /** 06 · direção estratégica */
+  lines: [0.78, 0.81, 0.84, 0.87] as readonly number[],
+  lineRamp: 0.01,
+  lineHold: 0.008,
+  /** 07 · lockup */
+  lockupIn: 0.93,
 } as const;
 
-export type ZoneId = "marketing" | "comercial" | "tecnologia" | "inteligencia";
-
-export const ZONES: {
-  id: ZoneId;
-  index: string;
+export type Zone = {
+  id: string;
   label: string;
-  /** posição no mundo */
-  pos: [number, number, number];
-  /** orientação própria antes de DIRECTION (rad) */
-  rotY: number;
-  /** altura da âncora do label */
-  anchorY: number;
-  /** fase do movimento independente */
-  phase: number;
-}[] = [
-  { id: "marketing", index: "01", label: "Marketing", pos: [-40, 0, 20], rotY: 0.62, anchorY: 11.5, phase: 0.0 },
-  { id: "comercial", index: "02", label: "Comercial", pos: [30, 0, 8], rotY: -0.38, anchorY: 9.5, phase: 1.9 },
-  { id: "tecnologia", index: "03", label: "Tecnologia", pos: [-12, 0, -30], rotY: 0.28, anchorY: 17, phase: 3.4 },
-  { id: "inteligencia", index: "04", label: "Inteligência", pos: [44, 0, -38], rotY: -0.72, anchorY: 13.5, phase: 5.1 },
+  /** quando a câmera chega */
+  at: number;
+  /** âncora do label no mundo */
+  anchor: [number, number, number];
+  /** nó da camada de sistema (x, z), no chão */
+  node: [number, number];
+};
+
+/** Capacidades, presas ao mundo na ordem da travessia. */
+export const ZONES: Zone[] = [
+  { id: "operacao", label: "Operação", at: 0.31, anchor: [230, 66, -14], node: [230, -48] },
+  { id: "logistica", label: "Logística", at: 0.38, anchor: [390, 14, -92], node: [390, -132] },
+  { id: "terminais", label: "Terminais", at: 0.52, anchor: [812, 34, 6], node: [760, -10] },
+  { id: "trade", label: "Trade", at: 0.56, anchor: [750, 18, -56], node: [750, -48] },
+  { id: "tecnologia", label: "Tecnologia", at: 0.6, anchor: [600, 42, -62], node: [600, -48] },
+  { id: "green", label: "Green", at: 0.64, anchor: [1000, 10, -78], node: [1000, -100] },
 ];
 
-/** Orientação compartilhada depois de DIRECTION: o vetor da trajetória. */
-export const SHARED_ROT_Y = -0.18;
+export type Line = { text: string; anchor: [number, number, number] };
+
+/** Quatro linhas curtas, uma de cada vez, presas a quatro pontos do mundo. */
+export const LINES: Line[] = [
+  { text: "mais presença", anchor: [860, 38, -70] },
+  { text: "mais conexão", anchor: [640, 32, -110] },
+  { text: "mais oportunidades", anchor: [420, 36, -60] },
+  { text: "mais inteligência", anchor: [600, 64, -62] },
+];
+
+export const LOCKUP = {
+  title: "BUILD 2030",
+  support: "Construir. Escalar. Liderar.",
+} as const;
