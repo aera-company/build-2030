@@ -1,0 +1,19 @@
+# sistema
+.DS_Store
+
+# dependências e build (em qualquer nível)
+node_modules/
+.next/
+*.tsbuildinfo
+.vercel
+.env*
+
+# base de referência (repositório próprio, não faz parte deste)
+new-3d-landbase/
+
+# referências de motion pesadas (ficam locais)
+public/motion-ref/*.mp4
+public/motion-ref/*.mov
+
+# painel do app
+.claude/

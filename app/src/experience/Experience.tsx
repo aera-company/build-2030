@@ -1,0 +1,86 @@
+"use client";
+
+import { useCallback, useEffect, useRef, useState } from "react";
+import { scrollStore, type ScrollState } from "@/motion/scroll-store";
+import { seg } from "@/motion/math";
+import { EASE } from "@/motion/tokens";
+import type { LayerHandle } from "./layer";
+import { JOURNEY_TOTAL } from "./journey";
+import { WorldLayer, type WorldHandle } from "./layers/WorldLayer";
+import { AnnotationLayer } from "./layers/AnnotationLayer";
+import { TopBar } from "./TopBar";
+import { DebugPanel } from "./DebugPanel";
+
+/**
+ * Um palco fixo, um spacer alto, um loop. O mundo (WebGL) embaixo, as
+ * anotações HTML por cima. A jornada é medida em viewports (`journey.ts`).
+ *
+ * Pré-roll: sem scroll, o tempo leva a entrada até o fim da marca (j ≈ 1.6);
+ * `max(j, jAuto)` garante que o scroll assume sem salto.
+ *
+ * `?debug=1` liga o painel. `?at=0.45` abre já em 45% da jornada (frames de revisão).
+ */
+export function Experience() {
+  const world = useRef<WorldHandle | null>(null);
+  const notes = useRef<LayerHandle | null>(null);
+  const top = useRef<LayerHandle | null>(null);
+  const debug = useRef<LayerHandle | null>(null);
+  const [spacer, setSpacer] = useState<number | null>(null);
+  const [showDebug, setShowDebug] = useState(false);
+  const bootT = useRef(-1);
+  const preroll = useRef(true);
+
+  useEffect(() => {
+    const size = () => setSpacer((JOURNEY_TOTAL + 1) * window.innerHeight);
+    const params = new URLSearchParams(window.location.search);
+    const at = params.get("at");
+    const id = requestAnimationFrame(() => {
+      size();
+      setShowDebug(params.get("debug") === "1");
+      if (at !== null) {
+        preroll.current = false;
+        const P = Math.min(1, Math.max(0, Number(at)));
+        window.scrollTo(0, P * JOURNEY_TOTAL * window.innerHeight);
+      }
+    });
+    window.addEventListener("resize", size);
+    return () => {
+      cancelAnimationFrame(id);
+      window.removeEventListener("resize", size);
+    };
+  }, []);
+
+  useEffect(() => {
+    const tick = (s: ScrollState) => {
+      if (bootT.current < 0) bootT.current = s.t;
+      let j = s.j;
+      if (preroll.current) {
+        const tt = s.t - bootT.current;
+        const jAuto = 1.75 * seg(tt, 1400, 7000, EASE.cinematic);
+        if (s.j > 0.05) preroll.current = false;
+        j = Math.max(j, jAuto);
+      }
+      const eff: ScrollState = j === s.j ? s : { ...s, j };
+      world.current?.tick(eff);
+      notes.current?.tick(eff);
+      top.current?.tick(eff);
+      debug.current?.tick(eff);
+    };
+    return scrollStore.subscribe(tick);
+  }, []);
+
+  const anchors = useCallback(() => world.current?.anchors() ?? [], []);
+  const debugSources = useCallback(() => world.current?.debug?.() ?? {}, []);
+
+  return (
+    <>
+      <div aria-hidden style={{ height: spacer ?? `${(JOURNEY_TOTAL + 1) * 100}vh` }} />
+      <div className="fixed inset-0 overflow-hidden bg-[var(--navy-deep)]">
+        <WorldLayer ref={world} />
+        <AnnotationLayer ref={notes} anchors={anchors} />
+        <TopBar ref={top} />
+        {showDebug ? <DebugPanel ref={debug} sources={debugSources} /> : null}
+      </div>
+    </>
+  );
+}
