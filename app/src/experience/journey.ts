@@ -23,7 +23,7 @@ const LENS: Record<BlockId, number> = {
   operacao: 1.8, // P 0.30–0.50
   capacidades: 1.26, // P 0.50–0.64
   sistema: 1.26, // P 0.64–0.78
-  direcao: 1.08, // P 0.78–0.90
+  direcao: 1.08, // P 0.78–0.90 · integração / síntese
   build: 0.9, // P 0.90–1
 };
 
@@ -59,6 +59,6 @@ export const BLOCK_LABELS: Record<BlockId, string> = {
   operacao: "03 / Operação",
   capacidades: "04 / Capacidades",
   sistema: "05 / Sistema",
-  direcao: "06 / Direção",
+  direcao: "06 / Integração",
   build: "07 / BUILD 2030",
 };

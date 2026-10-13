@@ -13,11 +13,13 @@ Histórico: Reset V2 "one object" em `archive/v2-system/` (docs `BUILD2030_SPATI
 reset Zirka (`BUILD2030_ZIRKA_RESET_V1.md`), V1 tipográfica em `archive/v1-typographic/`.
 Fonte estratégica: `../docs/GAVEA_BUILD2030_MASTER_BRIEF_V2.md`, `COPY_V1`.
 
-**A história do hero (não mudar sem brief):** chegada (AERA apresenta → marca → BUILD 2030
-pequeno) → entrada no berço STS → operação no pátio → capacidades reveladas (Operação,
-Logística, Terminais, Trade, Tecnologia, Green) → camada de sistema (rotas teal) → direção
-estratégica (mais presença / conexão / oportunidades / inteligência) → lockup
-(marca + BUILD 2030 + Construir. Escalar. Liderar.).
+**A história do hero (V3, 13/10; não mudar sem brief):** chegada (AERA apresenta → marca;
+sem BUILD 2030) → entrada no berço STS → operação no pátio → capacidades reveladas (Operação,
+Logística, Terminais, Trade, Tecnologia, Green) → integração (rotas teal, câmera sobe, síntese
+`Uma GAVEA.` / `Múltiplas capacidades.` / `One stop shop` pequeno) → BUILD 2030 (marca +
+BUILD 2030 + Construir. Escalar. Liderar. + `A próxima fase começa com integração.`).
+Auditoria e conceito: `../docs/GAVEA_BUILD2030_HERO_V3_AUDIT_AND_CONCEPT.md`. Mostrar, depois nomear.
+AERA só como crédito no hero.
 
 ## Modelo mental
 

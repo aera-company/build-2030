@@ -8,7 +8,7 @@ import { ShaderPass } from "three/addons/postprocessing/ShaderPass.js";
 import { GradeShader } from "./grade";
 import { cameraAt, atmosphereAt, fovAt } from "./camera-path";
 import { C } from "./materials";
-import { ZONES, LINES } from "./moments";
+import { ZONES } from "./moments";
 import { SUN_DIR, buildSky } from "./terminal/sky";
 import { buildGround } from "./terminal/ground";
 import { buildYard } from "./terminal/containers";
@@ -208,7 +208,6 @@ export class World {
     };
     const tmp = new THREE.Vector3();
     ZONES.forEach((z) => project(z.id, tmp.set(...z.anchor), true));
-    LINES.forEach((l, i) => project(`line-${i}`, tmp.set(...l.anchor), false));
     return out;
   }
 

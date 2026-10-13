@@ -13,7 +13,6 @@ export const M = {
   logoIn: 0.065,
   logoHold: 0.115,
   logoOut: 0.135,
-  buildIn: 0.09,
   /** 03–04 · labels de capacidade (ver ZONES) */
   labelRamp: 0.03,
   labelsOut: 0.885,
@@ -21,12 +20,11 @@ export const M = {
   routesStart: 0.64,
   routesEnd: 0.76,
   pulses: 0.7,
-  /** 06 · direção estratégica */
-  lines: [0.78, 0.81, 0.84, 0.87] as readonly number[],
-  lineRamp: 0.01,
-  lineHold: 0.008,
-  /** 07 · lockup */
+  /** 06 · integração: a síntese, uma linha de cada vez, e a saída antes do lockup */
+  synth: { one: 0.8, many: 0.835, oss: 0.875, out: 0.915 },
+  /** 07 · BUILD 2030 */
   lockupIn: 0.93,
+  lockupLine: 0.955,
 } as const;
 
 export type Zone = {
@@ -50,17 +48,15 @@ export const ZONES: Zone[] = [
   { id: "green", label: "Green", at: 0.64, anchor: [1000, 10, -78], node: [1000, -100] },
 ];
 
-export type Line = { text: string; anchor: [number, number, number] };
-
-/** Quatro linhas curtas, uma de cada vez, presas a quatro pontos do mundo. */
-export const LINES: Line[] = [
-  { text: "mais presença", anchor: [860, 38, -70] },
-  { text: "mais conexão", anchor: [640, 32, -110] },
-  { text: "mais oportunidades", anchor: [420, 36, -60] },
-  { text: "mais inteligência", anchor: [600, 64, -62] },
-];
+/** Síntese (Ato 04). Sentence case; "One stop shop" só como conclusão, pequena. */
+export const SYNTH = {
+  one: "Uma GAVEA.",
+  many: "Múltiplas capacidades.",
+  oss: "One stop shop",
+} as const;
 
 export const LOCKUP = {
   title: "BUILD 2030",
   support: "Construir. Escalar. Liderar.",
+  line: "A próxima fase começa com integração.",
 } as const;

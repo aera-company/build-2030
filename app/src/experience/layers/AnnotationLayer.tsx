@@ -9,7 +9,7 @@ import { setOpacity, setTransform } from "@/motion/dom";
 import type { ScrollState } from "@/motion/scroll-store";
 import type { LayerHandle } from "../layer";
 import { progressOf } from "../journey";
-import { M, ZONES, LINES, LOCKUP } from "@/world/moments";
+import { M, ZONES, SYNTH, LOCKUP } from "@/world/moments";
 import type { Anchor } from "@/world/World";
 
 /* ------------------------------------------------------------
@@ -29,20 +29,19 @@ const ITEMS: Item[] = [
     show: (P) => seg(P, z.at, z.at + M.labelRamp, EASE.out) * (1 - seg(P, M.labelsOut, M.labelsOut + 0.03, EASE.expoIn)),
     occlude: true,
   })),
-  ...LINES.map<Item>((_, i) => ({
-    id: `line-${i}`,
-    show: (P) => {
-      const a = M.lines[i];
-      return pulse(P, a, a + M.lineRamp, a + M.lineRamp + M.lineHold, a + M.lineRamp * 2 + M.lineHold, EASE.out, EASE.expoIn);
-    },
-  })),
 ];
+
+/** Síntese: entra linha a linha, sai junto antes do lockup. */
+const synthIn = (P: number, at: number) => pulse(P, at, at + 0.02, M.synth.out, M.synth.out + 0.015, EASE.out, EASE.expoIn);
 
 export const AnnotationLayer = forwardRef<LayerHandle, Props>(function AnnotationLayer({ anchors }, ref) {
   const presents = useRef<HTMLDivElement | null>(null);
   const logo = useRef<HTMLDivElement | null>(null);
-  const build = useRef<HTMLDivElement | null>(null);
+  const synthOne = useRef<HTMLDivElement | null>(null);
+  const synthMany = useRef<HTMLDivElement | null>(null);
+  const synthOss = useRef<HTMLDivElement | null>(null);
   const lockup = useRef<HTMLDivElement | null>(null);
+  const lockupLine = useRef<HTMLDivElement | null>(null);
   const els = useRef<Record<string, HTMLDivElement | null>>({});
   const bootT = useRef(-1);
 
@@ -60,9 +59,14 @@ export const AnnotationLayer = forwardRef<LayerHandle, Props>(function Annotatio
         const lg = pulse(P, M.logoIn, M.logoIn + 0.03, M.logoHold, M.logoOut, EASE.out, EASE.expoIn);
         setOpacity(logo.current, lg);
         setTransform(logo.current, `translate3d(-50%, calc(-50% + ${((1 - lg) * 0.012 * H).toFixed(1)}px), 0)`);
-        const bd = pulse(P, M.buildIn, M.buildIn + 0.025, M.logoHold, M.logoOut, EASE.out, EASE.expoIn);
-        setOpacity(build.current, bd);
-        setTransform(build.current, `translate3d(-50%, ${((1 - bd) * 0.01 * H).toFixed(1)}px, 0)`);
+        const s1 = synthIn(P, M.synth.one);
+        const s2 = synthIn(P, M.synth.many);
+        const s3 = synthIn(P, M.synth.oss);
+        setOpacity(synthOne.current, s1);
+        setTransform(synthOne.current, `translate3d(0, ${((1 - s1) * 0.018 * H).toFixed(1)}px, 0)`);
+        setOpacity(synthMany.current, s2);
+        setTransform(synthMany.current, `translate3d(0, ${((1 - s2) * 0.018 * H).toFixed(1)}px, 0)`);
+        setOpacity(synthOss.current, s3);
 
         const byId = new Map(anchors().map((x) => [x.id, x]));
         ITEMS.forEach((it) => {
@@ -77,6 +81,9 @@ export const AnnotationLayer = forwardRef<LayerHandle, Props>(function Annotatio
         const lk = seg(P, M.lockupIn, M.lockupIn + 0.04, EASE.out);
         setOpacity(lockup.current, lk);
         setTransform(lockup.current, `translate3d(0, ${((1 - lk) * 0.03 * H).toFixed(1)}px, 0)`);
+        const ll = seg(P, M.lockupLine, M.lockupLine + 0.035, EASE.out);
+        setOpacity(lockupLine.current, ll);
+        setTransform(lockupLine.current, `translate3d(0, ${((1 - ll) * 0.012 * H).toFixed(1)}px, 0)`);
       },
     }),
     [anchors],
@@ -97,10 +104,6 @@ export const AnnotationLayer = forwardRef<LayerHandle, Props>(function Annotatio
       <div ref={logo} className="absolute left-1/2 top-[42%]" style={{ opacity: 0, transform: "translate3d(-50%, -50%, 0)" }}>
         <BrandMark width={300} />
       </div>
-      <div ref={build} className="display absolute left-1/2 top-[52%] text-[var(--white)]" style={{ fontSize: "clamp(16px, 1.5vw, 24px)", fontWeight: 560, fontStretch: "110%", letterSpacing: "0.12em", opacity: 0, transform: "translate3d(-50%, 0, 0)" }}>
-        BUILD 2030
-      </div>
-
       {/* 03–04 · capacidades presas ao mundo */}
       {ZONES.map((z) => (
         <div key={z.id} ref={bind(z.id)} className={anchored} style={{ opacity: 0, willChange: "transform, opacity" }}>
@@ -109,17 +112,18 @@ export const AnnotationLayer = forwardRef<LayerHandle, Props>(function Annotatio
         </div>
       ))}
 
-      {/* 06 · quatro linhas */}
-      {LINES.map((l, i) => (
-        <div
-          key={l.text}
-          ref={bind(`line-${i}`)}
-          className="display absolute left-0 top-0 -translate-y-full text-[var(--white)]"
-          style={{ fontSize: "clamp(18px, 2vw, 32px)", fontWeight: 500, fontStretch: "100%", letterSpacing: "-0.02em", lineHeight: 1.1, opacity: 0, willChange: "transform, opacity" }}
-        >
-          {l.text}
+      {/* 06 · integração: a síntese, fixa na tela, embaixo à esquerda, sobre o mundo inteiro */}
+      <div className="absolute bottom-[14vh] left-[6vw] flex flex-col items-start gap-3">
+        <div ref={synthOne} className="display text-[var(--white)]" style={{ fontSize: "clamp(26px, 3vw, 52px)", fontWeight: 540, fontStretch: "104%", letterSpacing: "-0.025em", lineHeight: 1, opacity: 0 }}>
+          {SYNTH.one}
         </div>
-      ))}
+        <div ref={synthMany} className="display text-[var(--white)]" style={{ fontSize: "clamp(26px, 3vw, 52px)", fontWeight: 540, fontStretch: "104%", letterSpacing: "-0.025em", lineHeight: 1, opacity: 0 }}>
+          {SYNTH.many}
+        </div>
+        <div ref={synthOss} className="mt-2" style={{ opacity: 0 }}>
+          <EditorialLabel tick tone="signal">{SYNTH.oss}</EditorialLabel>
+        </div>
+      </div>
 
       {/* 07 · lockup, como no Asset C: canto superior esquerdo, 5% do quadro */}
       <div ref={lockup} className="absolute left-[6vw] top-[10vh] flex flex-col items-start gap-5" style={{ opacity: 0 }}>
@@ -128,6 +132,9 @@ export const AnnotationLayer = forwardRef<LayerHandle, Props>(function Annotatio
           {LOCKUP.title}
         </span>
         <EditorialLabel tone="white" style={{ textTransform: "none", letterSpacing: "0.1em", fontSize: 13 }}>{LOCKUP.support}</EditorialLabel>
+        <div ref={lockupLine} className="mt-3 max-w-[34ch] text-[var(--muted)]" style={{ fontSize: "clamp(14px, 1.05vw, 17px)", lineHeight: 1.4, opacity: 0 }}>
+          {LOCKUP.line}
+        </div>
       </div>
     </div>
   );

@@ -55,7 +55,7 @@ export const buildRoutes = (): Built => {
 
   // pulsos
   const pulseMat = new THREE.MeshBasicMaterial({ color: hdr(C.tealLight, 2.6), transparent: true, opacity: 0, fog: true });
-  const pulses = [0, 1, 2].map(() => {
+  const pulses = [0, 1, 2, 3, 4].map(() => {
     const m = new THREE.Mesh(new THREE.SphereGeometry(1.3, 10, 10), pulseMat);
     group.add(m);
     return m;
@@ -79,7 +79,7 @@ export const buildRoutes = (): Built => {
     const po = seg(p, M.pulses, M.pulses + 0.04) * sys;
     pulseMat.opacity = po;
     pulses.forEach((m, i) => {
-      const u = ((t * 0.00006 + i / 3) % 1 + 1) % 1;
+      const u = ((t * 0.00007 + i / 5) % 1 + 1) % 1;
       const uu = Math.min(u, Math.max(0.001, draw - 0.001));
       main.curve.getPointAt(uu, m.position);
       m.position.y = 1.4;
