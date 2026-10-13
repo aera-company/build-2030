@@ -1,0 +1,32 @@
+# GAVEA GROUP / BUILD 2030 · 60S MOTION
+## SCRIPT V1 · VOICE / SCREEN / VISUAL / SOUND
+**Data:** 13/10/2026 · **Duração-alvo:** 60 s (55–65) · **Prova primeiro:** 00:00–00:25 (abertura comprimida + GAVEA integrada + virada + DIRECTION + início de Brand & Marketing Direction)
+**Regra política (seção 3 do Master Brief):** nada sugere substituição; a agência continua; AERA entra como direção, coordenação, consistência e novas tecnologias.
+**Regra de copy:** sentence case nas frases; caixa alta só nas palavras-sistema (BUILD 2030, DIRECTION, BRAND & MARKETING DIRECTION, NEW TECHNOLOGIES & AI, ONE STOP SHOP) e nos labels. Sem travessões.
+
+| # | Tempo | VOICE (locução) | SCREEN (copy) | VISUAL | SOUND |
+|---|---|---|---|---|---|
+| 01 | 00:00–00:05 | (silêncio) | `AERA apresenta` (micro, 0.6 s) · marca oficial GAVEA GROUP (2.6 s) · `BUILD 2030` (pequeno, sob a marca, 3.6 s) | Preto. Oito fragmentos físicos reais em cortes de 0.4–0.6 s: água no casco, aço do P-35, equipe no convés, garra de carga, stacker GAVEA Logística, guindaste com bobina, pátio aéreo, baía com ponte. A marca entra sobre o último fragmento escurecido. | tensão grave; clack de aço a cada corte; o último corte cai em quase silêncio; a marca assenta com um "land" seco |
+| 02 | 00:05–00:14 | "A GAVEA já conecta diferentes capacidades para entregar soluções integradas." | labels presos ao mundo: `Operação` `Logística` `Terminais` `Trade` `Green` `Tecnologia` (um a um, 0.5 s) · depois `Uma GAVEA.` / `Múltiplas capacidades.` · pequeno `ONE STOP SHOP` | O mundo 3D (plate "chegada": terminal ao entardecer, câmera descendo) com os labels surgindo nas zonas; dois punches reais (equipe no cais, stacker) entre os labels; corta para o plate "sistema": rotas teal acendem e ligam as zonas enquanto a síntese entra em duas linhas. | pulso baixo começa; tick a cada label; nó a cada rota; a síntese entra com um pivot curto; ONE STOP SHOP com um tick alto |
+| 03 | 00:14–00:20 | "Agora, essa mesma lógica pode orientar a próxima fase da empresa." | `E se essa mesma lógica de integração` / `orientasse a próxima fase?` (duas linhas, 2.4vw, sentence case) | A virada: o plate "sistema" escurece para navy; as rotas teal se recolhem numa única linha horizontal; a linha atravessa o quadro e vira o eixo da próxima cena. Nada de slide: a frase entra enquanto a linha corre. | invert (o campo vira); line_draw contínuo; a voz entra 0.2 s depois do invert |
+| 04 | 00:20–00:29 | "BUILD 2030 propõe uma nova camada de direção." | `DIRETORIA` (micro, acima) · `DIRECTION` (escrita pela linha, 9vw) · `AGÊNCIA` `TIME INTERNO` `COMERCIAL` `PARCEIROS` `TECNOLOGIA` (micro, abaixo, ticking) · `Planejar.` `Priorizar.` `Conectar.` `Acompanhar.` (cadência 0.5 s) · `Uma camada entre estratégia e execução.` | Campo navy com grid discreto. A linha do eixo escreve DIRECTION letra a letra (contorno, cabeça de luz, preenchimento). Acima, a diretoria; abaixo, as cinco frentes que já existem, todas acesas (ninguém sai). Da palavra saem quatro hastes curtas com os verbos. | trace enquanto escreve; tick por letra concluída; node por frente abaixo; thud discreto nos quatro verbos |
+| 05 | 00:29–00:40 | "Na marca e no marketing, a AERA define posicionamento, sistema, planejamento e direção, conectando diretoria, agência, comercial e parceiros." | `BRAND & MARKETING DIRECTION` (slam contido, 5vw) · `POSICIONAMENTO` `DESIGN SYSTEM` `PLANEJAMENTO` `DIREÇÃO CRIATIVA` (micro em movimento) · `AGÊNCIA / EXECUÇÃO` · `A agência continua.` / `A direção ganha uma camada dedicada.` | Fluxo direção → brief → execução → validação: janelas reais (escritório GAVEA, equipe no cais, stacker com marca) entram e saem por máscara ao longo do eixo; a linha passa por cada etapa e volta à diretoria (aprovação). | packets correndo pelo eixo; whoosh curto nas janelas; tick nos labels; open_cell na validação |
+| 06 | 00:40–00:51 | "E em novas tecnologias, transforma necessidades reais em projetos de IA, sistemas e novas ferramentas para o negócio." | `NEW TECHNOLOGIES & AI` · `Inteligência aplicada ao negócio.` · `GAVEA TRADE` `PORTAL GAVEA` `PROCESSOS` `CONHECIMENTO` `SISTEMAS` `IA` `DECISÃO` · `Entender.` `Desenhar.` `Implementar.` `Evoluir.` | Virada de ritmo: telas reais do GAVEA Trade (painel, propostas, base de preços, follow-ups) em janelas no grid, com dados reais; a linha percorre as telas como um fluxo. Sem cérebro, sem holograma, sem dashboard falso. | pulso sobe; packets mais rápidos; ticks em cadência; um lock seco em "decisão" |
+| 07 | 00:51–00:57 | "Duas frentes. Uma mesma lógica." | `BRAND & MARKETING DIRECTION` + `NEW TECHNOLOGIES & AI` convergem para `DIRECTION` · `Duas frentes.` / `Uma mesma direção.` | As duas palavras entram de lados opostos e se encontram na linha; a linha vira a haste do D de DIRECTION. | pivot; node triplo; silêncio curto antes do close |
+| 08 | 00:57–01:03 | "Direção para construir, escalar e liderar. A próxima fase pode começar por aqui." | `BUILD.` `SCALE.` `LEAD.` · marca oficial GAVEA GROUP · `BUILD 2030` · pequeno `AERA × GAVEA` · `A próxima fase pode começar por aqui.` | Fragmentos reais em três punches (aço, equipe, baía) sincronizados com as três palavras; recuo para o plate 3D inteiro com as rotas acesas; a marca e o título assentam; corte seco no último impacto. | três slams secos; land na marca; cut no fim; sem cauda |
+
+## Locução V1 (93 palavras)
+
+> A GAVEA já conecta diferentes capacidades para entregar soluções integradas.
+> Agora, essa mesma lógica pode orientar a próxima fase da empresa.
+> BUILD 2030 propõe uma nova camada de direção.
+> Na marca e no marketing, a AERA define posicionamento, sistema, planejamento e direção, conectando diretoria, agência, comercial e parceiros.
+> E em novas tecnologias, transforma necessidades reais em projetos de IA, sistemas e novas ferramentas para o negócio.
+> Duas frentes. Uma mesma lógica.
+> Direção para construir, escalar e liderar.
+> A próxima fase pode começar por aqui.
+
+Voz: GAVEA Narradora V6 (ElevenLabs, voz feminina desenhada no projeto PLAN27, `zzpxFfJfnIxSj4DpCkzF`), `eleven_multilingual_v2`, estabilidade 0.5, similaridade 0.8, velocidade 0.93. Se a locução deixar o filme institucional, cortar as linhas 05 e 06 pela metade e deixar o motion carregar os labels.
+
+## Prova de 25 s (o que se produz primeiro)
+Blocos 01 (comprimido para 3 s), 02, 03, 04 e os primeiros 3 s do 05. Termina num corte enquanto o índice ainda está ticando: a vontade de ver o resto é o teste.

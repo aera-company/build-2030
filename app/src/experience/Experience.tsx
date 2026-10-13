@@ -26,6 +26,8 @@ type CaptureApi = {
   ready: () => boolean;
   goto: (P: number) => void;
   play: (ms: number) => Promise<void>;
+  /** Render determinístico de um frame: P e tempo (ms) fixos, sem scroll nem relógio. */
+  render: (P: number, tMs: number) => void;
 };
 
 declare global {
@@ -41,8 +43,10 @@ export function Experience() {
   const debug = useRef<LayerHandle | null>(null);
   const [spacer, setSpacer] = useState<number | null>(null);
   const [showDebug, setShowDebug] = useState(false);
+  const [plate, setPlate] = useState(false);
   const bootT = useRef(-1);
   const preroll = useRef(true);
+  const fixed = useRef<{ P: number; t: number } | null>(null);
 
   useEffect(() => {
     const size = () => setSpacer((JOURNEY_TOTAL + 1) * window.innerHeight);
@@ -51,6 +55,7 @@ export function Experience() {
     const id = requestAnimationFrame(() => {
       size();
       setShowDebug(params.get("debug") === "1");
+      setPlate(params.get("plate") === "1");
       if (at !== null) {
         preroll.current = false;
         const P = Math.min(1, Math.max(0, Number(at)));
@@ -62,6 +67,11 @@ export function Experience() {
           ready: () => (world.current?.frames?.() ?? 0) > 5,
           goto: (P) => {
             window.scrollTo(0, Math.min(1, Math.max(0, P)) * JOURNEY_TOTAL * window.innerHeight);
+            scrollStore.invalidate();
+          },
+          render: (P, tMs) => {
+            fixed.current = { P: Math.min(1, Math.max(0, P)), t: tMs };
+            window.scrollTo(0, fixed.current.P * JOURNEY_TOTAL * window.innerHeight);
             scrollStore.invalidate();
           },
           play: (ms) =>
@@ -96,7 +106,12 @@ export function Experience() {
         if (s.j > 0.05) preroll.current = false;
         j = Math.max(j, jAuto);
       }
-      const eff: ScrollState = j === s.j ? s : { ...s, j };
+      let eff: ScrollState = j === s.j ? s : { ...s, j };
+      if (fixed.current) {
+        const fx = fixed.current;
+        eff = { ...s, j: fx.P * JOURNEY_TOTAL, t: fx.t, dt: 33 };
+        bootT.current = 0;
+      }
       world.current?.tick(eff);
       notes.current?.tick(eff);
       top.current?.tick(eff);
@@ -113,8 +128,8 @@ export function Experience() {
       <div aria-hidden style={{ height: spacer ?? `${(JOURNEY_TOTAL + 1) * 100}vh` }} />
       <div className="fixed inset-0 overflow-hidden bg-[var(--navy-deep)]">
         <WorldLayer ref={world} />
-        <AnnotationLayer ref={notes} anchors={anchors} />
-        <TopBar ref={top} />
+        {plate ? null : <AnnotationLayer ref={notes} anchors={anchors} />}
+        {plate ? null : <TopBar ref={top} />}
         {showDebug ? <DebugPanel ref={debug} sources={debugSources} /> : null}
       </div>
     </>

@@ -19,3 +19,6 @@ public/motion-ref/*.mov
 .claude/
 docs/**/scroll.webm
 app/public/env/*.hdr
+build2030-film/out/
+build2030-film/public/media/
+build2030-film/public/plates/

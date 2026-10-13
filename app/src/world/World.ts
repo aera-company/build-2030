@@ -41,6 +41,7 @@ export class World {
   private composer: EffectComposer;
   private bloom: UnrealBloomPass;
   private gtao: GTAOPass;
+  private useAo = true;
   private envReady = false;
   private fog: THREE.FogExp2;
   private sun: THREE.DirectionalLight;
@@ -125,6 +126,8 @@ export class World {
       if (b.occluders) this.occluders.push(...b.occluders);
     });
 
+    const q = new URLSearchParams(window.location.search);
+    this.useAo = q.get("ao") !== "0";
     this.composer = new EffectComposer(this.renderer);
     this.composer.addPass(new RenderPass(this.scene, this.camera));
     this.gtao = new GTAOPass(this.scene, this.camera, 1, 1);
@@ -132,7 +135,7 @@ export class World {
     this.gtao.blendIntensity = 0.85;
     this.gtao.updateGtaoMaterial({ radius: 4, distanceExponent: 1, thickness: 1.5, scale: 1.1, samples: 12, distanceFallOff: 1, screenSpaceRadius: false });
     this.gtao.updatePdMaterial({ lumaPhi: 10, depthPhi: 2, normalPhi: 3, radius: 4, radiusExponent: 1, rings: 2, samples: 12 });
-    this.composer.addPass(this.gtao);
+    if (this.useAo) this.composer.addPass(this.gtao);
     this.bloom = new UnrealBloomPass(new THREE.Vector2(1, 1), 0.32, 0.4, 1.0);
     this.composer.addPass(this.bloom);
     this.composer.addPass(new ShaderPass(GradeShader));
