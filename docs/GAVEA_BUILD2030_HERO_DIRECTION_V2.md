@@ -83,3 +83,19 @@ Jornada: 9 viewports de scroll (≈ 30 s num scroll calmo). Pré-roll pelo tempo
 
 Frames de revisão em `review-frames-hero-v2/` (8 PNG a 1440×900 nos P 0, 0.14, 0.30, 0.44, 0.56, 0.70, 0.86, 1.00 e `scroll.mp4` com a travessia inteira), capturados por `app/scripts/capture.mjs`.
 - BUILD 2030 como próxima fase: só nomeado depois que a camada teal organizou o mundo.
+
+---
+
+## 8. Passe de realismo 1 (13/10/2026)
+
+Pedido do Tiago: chegar mais perto da pegada do Asset C sem sair do tempo real. Caminho escolhido: subir o realismo do mundo atual (luz, água, texturas, pós), depois modelos reais.
+
+O que entrou neste passe, tudo gratuito (CC0, Poly Haven) e sem gerar nada:
+
+- **Ambiente HDRI** (`industrial_sunset_02_puresky`, convertido para uma versão limitada em `public/env/`): luz ambiente e reflexos de verdade em todo material; o céu visível continua sendo o domo em shader (controlado, sem sol estourado).
+- **Água com reflexo do mundo** (`Water.js`): a bacia reflete navios, guindastes e luzes, com ondulação animada; a baía atrás reflete o céu.
+- **Texturas PBR**: concreto no pátio, asfalto nas vias, chapa corrugada nos galpões, corrugado (mapa de normais) nos contêineres.
+- **Pós-processamento**: oclusão de ambiente (GTAO), bloom contido, grading no tom do Asset C (sombras para navy, altas luzes para âmbar, vinheta).
+- **Materiais foscos onde o sol espelhava** (pátio, telhados, baía), luzes físicas reajustadas, DPR 1.25 para manter 30 fps com os passes extras.
+
+Frames: `review-frames-hero-v2-r1/` (contact-sheet.jpg, 8 PNG, scroll.mp4). Próximo passe: modelos reais para STS, contêineres, navio e caminhão (os quatro objetos que a câmera mais aproxima), árvores e pessoas em escala.

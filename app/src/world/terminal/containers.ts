@@ -1,5 +1,6 @@
 import * as THREE from "three";
 import { CONTAINER_PALETTE } from "../materials";
+import { normalOnly } from "../textures";
 import { L, type Built } from "./layout";
 
 /* ============================================================
@@ -19,7 +20,8 @@ const geometry = () => {
   return g;
 };
 
-const material = () => new THREE.MeshStandardMaterial({ color: 0xffffff, roughness: 0.78, metalness: 0.18 });
+const material = () =>
+  new THREE.MeshStandardMaterial({ color: 0xffffff, roughness: 0.62, metalness: 0.3, normalMap: normalOnly("corrugated_iron_02", [5, 1]), normalScale: new THREE.Vector2(0.9, 0.9) });
 
 type Slot = { x: number; y: number; z: number };
 

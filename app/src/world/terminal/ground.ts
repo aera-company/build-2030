@@ -1,5 +1,8 @@
 import * as THREE from "three";
-import { C, cyl, glow, noiseTexture, sprite, std } from "../materials";
+import { C, cyl, glow, sprite, std } from "../materials";
+import { pbr, waterNormals } from "../textures";
+import { Water } from "three/addons/objects/Water.js";
+import { SUN_DIR } from "./sky";
 import { L, type Built } from "./layout";
 
 /* ============================================================
@@ -43,7 +46,7 @@ export const buildGround = (): Built & { lampPoints: THREE.Vector3[] } => {
   const ap = L.apron;
   const apron = new THREE.Mesh(
     new THREE.PlaneGeometry(ap.x1 - ap.x0, ap.z1 - ap.z0),
-    new THREE.MeshStandardMaterial({ color: C.concrete, roughness: 0.92, metalness: 0.04, map: noiseTexture("#414a56", [26, 8], 14) }),
+    new THREE.MeshStandardMaterial({ color: 0x6a7079, roughness: 0.97, metalness: 0.0, ...pbr("concrete_floor_02", [118, 32]), normalScale: new THREE.Vector2(0.5, 0.5) }),
   );
   apron.rotation.x = -Math.PI / 2;
   apron.position.set((ap.x0 + ap.x1) / 2, 0, (ap.z0 + ap.z1) / 2);
@@ -51,7 +54,7 @@ export const buildGround = (): Built & { lampPoints: THREE.Vector3[] } => {
   group.add(apron);
 
   // Vias: três ao longo do cais, três transversais
-  const roadMat = new THREE.MeshStandardMaterial({ color: C.asphalt, roughness: 0.95, metalness: 0.02, map: noiseTexture("#20262e", [60, 1], 8) });
+  const roadMat = new THREE.MeshStandardMaterial({ color: 0x6b6f75, roughness: 0.97, metalness: 0.0, ...pbr("asphalt_02", [112, 1]), normalScale: new THREE.Vector2(0.5, 0.5) });
   const road = (x0: number, x1: number, z0: number, z1: number) => {
     const r = new THREE.Mesh(new THREE.PlaneGeometry(x1 - x0, z1 - z0), roadMat);
     r.rotation.x = -Math.PI / 2;
@@ -126,9 +129,9 @@ export const buildGround = (): Built & { lampPoints: THREE.Vector3[] } => {
   const mast = (x: number, z: number) => {
     const p = cyl(0.5, 0.9, 35, poleMat, 8);
     p.position.set(x, 17.5, z);
-    const crown = new THREE.Mesh(new THREE.BoxGeometry(4, 1.2, 4), glow(C.warmWhite, 4.5, 0x222222));
+    const crown = new THREE.Mesh(new THREE.BoxGeometry(4, 1.2, 4), glow(C.warmWhite, 2.4, 0x222222));
     crown.position.set(x, 35, z);
-    const s = sprite(C.warmWhite, 26, 0.26);
+    const s = sprite(C.warmWhite, 22, 0.16);
     s.position.set(x, 35, z);
     group.add(p, crown, s);
   };
@@ -148,14 +151,22 @@ export const buildGround = (): Built & { lampPoints: THREE.Vector3[] } => {
   for (let i = 0; i < 14; i++) tree(560 + ((i * 37) % 170), -262 - ((i * 23) % 36), 2.4 + (i % 3));
   for (let i = 0; i < 7; i++) tree(1104 + (i % 2) * 7, -62 - i * 11, 2.2 + (i % 3) * 0.8);
 
-  // Água: a bacia na frente e a baía atrás
-  const ripple = noiseTexture("#808080", [420, 170], 90);
-  const waterMat = new THREE.MeshStandardMaterial({ color: C.water, roughness: 0.9, metalness: 0.08, bumpMap: ripple, bumpScale: 0.5 });
-  const basin = new THREE.Mesh(new THREE.PlaneGeometry(6000, 2400), waterMat);
-  basin.rotation.x = -Math.PI / 2;
-  basin.position.set(600, -1.2, 1200);
-  group.add(basin);
-  const bay = new THREE.Mesh(new THREE.PlaneGeometry(6000, 2600), waterMat);
+  // Água: a bacia na frente reflete o mundo (Water.js); a baía atrás reflete o céu
+  const water = new Water(new THREE.PlaneGeometry(6000, 2400), {
+    textureWidth: 1024,
+    textureHeight: 1024,
+    waterNormals: waterNormals(),
+    sunDirection: SUN_DIR.clone(),
+    sunColor: 0x9a6a48,
+    waterColor: 0x071527,
+    distortionScale: 3.0,
+    fog: true,
+  });
+  water.rotation.x = -Math.PI / 2;
+  water.position.set(600, -1.2, 1200);
+  (water.material as THREE.ShaderMaterial).uniforms.size.value = 0.9;
+  group.add(water);
+  const bay = new THREE.Mesh(new THREE.PlaneGeometry(6000, 2600), new THREE.MeshStandardMaterial({ color: 0x071527, roughness: 0.72, metalness: 0.5 }));
   bay.rotation.x = -Math.PI / 2;
   bay.position.set(600, -1.2, L.apron.z0 - 1300);
   group.add(bay);
@@ -179,18 +190,16 @@ export const buildGround = (): Built & { lampPoints: THREE.Vector3[] } => {
     group.add(m);
     streaks.push(m);
   };
-  for (let x = 30; x <= 1120; x += 52) streak(x + ((x * 7) % 11) - 5, 40 + ((x * 13) % 60), 1.4 + ((x * 3) % 5) * 0.5, undefined, 0.1 + ((x * 11) % 7) * 0.025);
-  L.sts.xs.forEach((x) => streak(x, 120, 5, C.warmWhite, 0.14));
-  [700, 760, 820].forEach((x) => streak(x, 90, 4, C.warmWhite, 0.1));
+  L.sts.xs.forEach((x) => streak(x, 90, 4, C.warmWhite, 0.06));
   // Clarão do sol na água, à direita
   const sunGlow = sprite(0xe7935f, 700, 0.1);
   sunGlow.position.set(2600, 0, 240);
   group.add(sunGlow);
 
   const update = (t: number) => {
-    const k = 0.14 + Math.sin(t * 0.0013) * 0.02;
+    const k = 0.05 + Math.sin(t * 0.0013) * 0.01;
     streakMat.opacity = k;
-    ripple.offset.set(t * 0.000012, t * 0.000007);
+    (water.material as THREE.ShaderMaterial).uniforms.time.value = t * 0.00045;
     for (let i = 0; i < streaks.length; i++) {
       const s = streaks[i];
       s.scale.x = 1 + Math.sin(t * 0.0017 + i * 1.3) * 0.25;

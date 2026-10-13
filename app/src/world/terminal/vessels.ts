@@ -9,10 +9,10 @@ import { L, type Built, wrap } from "./layout";
    Casco por extrusão de um perfil em planta.
    ============================================================ */
 
-const hullMat = std(C.hull, 0.6, 0.35);
+const hullMat = std(C.hull, 0.7, 0.3);
 const bootMat = std(C.hullBoot, 0.8, 0.2);
-const houseMat = std(0x8f8d86, 0.8, 0.1);
-const deckMat = std(0x30383f, 0.9, 0.1);
+const houseMat = std(0x6e6c66, 0.85, 0.1);
+const deckMat = std(0x30383f, 0.96, 0.05);
 
 /** Perfil em planta: popa em u=0, proa em u=len. v = meio-boca. */
 const hullShape = (len: number, beam: number, bowAtPlusX: boolean) => {
@@ -42,7 +42,7 @@ const hull = (len: number, beam: number, height: number, bowAtPlusX: boolean) =>
 
 const windows = (parent: THREE.Object3D, w: number, rows: number, y0: number, z: number, x: number, color = C.warmWhite) => {
   for (let r = 0; r < rows; r++) {
-    const strip = new THREE.Mesh(new THREE.BoxGeometry(w - 6, 0.7, 0.3), glow(color, 1.1, 0x111111));
+    const strip = new THREE.Mesh(new THREE.BoxGeometry(w - 8, 0.45, 0.3), glow(color, 0.6, 0x111111));
     strip.position.set(x, y0 + r * 2.6, z);
     parent.add(strip);
   }
@@ -104,7 +104,7 @@ export const buildVessels = (): Built => {
   ship2.position.set(s2.x0, -6, s2.z0 + s2.beam / 2);
   const h2 = hull(s2.len, s2.beam, 16, false);
   ship2.add(h2);
-  const deck2 = new THREE.Mesh(new THREE.ExtrudeGeometry(hullShape(s2.len, s2.beam - 1, false), { depth: 0.6, bevelEnabled: false }), std(C.deckGreen, 0.85, 0.1));
+  const deck2 = new THREE.Mesh(new THREE.ExtrudeGeometry(hullShape(s2.len, s2.beam - 1, false), { depth: 0.6, bevelEnabled: false }), std(C.deckGreen, 0.95, 0.05));
   deck2.rotation.x = -Math.PI / 2;
   deck2.position.y = 16;
   ship2.add(deck2);

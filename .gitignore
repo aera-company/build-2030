@@ -18,3 +18,4 @@ public/motion-ref/*.mov
 # painel do app
 .claude/
 docs/**/scroll.webm
+app/public/env/*.hdr

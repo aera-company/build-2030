@@ -31,6 +31,10 @@ longo do cais, fov variável), dentro de um palco fixo com spacer alto
 via `setLive`) chama `tick(state)` em cada camada; nada de React state no caminho quente.
 Cada módulo do terminal devolve `{ group, occluders?, update?(t, p, sys) }`.
 
+Pós (World.ts): RenderPass → GTAOPass → UnrealBloomPass → ShaderPass(GradeShader, `grade.ts`) → OutputPass.
+Água da bacia é `three/addons/objects/Water.js` (reflexo real); sprites de brilho estão desligados
+(`sprite()` em `materials.ts` devolve invisível) porque viram quadrados pretos no passe de normais do GTAO.
+
 Camadas: `WorldLayer` (canvas three.js com EffectComposer + bloom leve; publica âncoras
 3D projetadas com oclusão), `AnnotationLayer` (labels presos ao mundo, abertura, lockup),
 `TopBar`, `DebugPanel`. Primitivos: `EditorialLabel`, `BrandMark` (logo oficial, intacto).
@@ -45,7 +49,9 @@ dentro de tipo. Nunca HUD.** O teal só existe na camada de sistema.
   `BrandMark`. Nunca redesenhar, recolorir, separar o símbolo, dar glow. O logo que
   aparece dentro do Asset C é reinterpretado e não entra.
 - **Zero geração paga.** O mundo é geométrico em tempo real; os assets A/B/C são só
-  referência (nenhum pixel entra).
+  referência (nenhum pixel entra). Texturas e HDRI em `public/tex` e `public/env` são
+  Poly Haven (CC0); o `.hdr` original fica no disco, o app carrega a versão limitada `.jpg`
+  (feita com o script Python inline que decodifica RGBE, ver histórico da sessão de 13/10).
 - **Sem HUD / telemetria falsa / cards / glass / neon.** Labels mono pequenos, presos ao mundo.
 - **Copy** mínimo (universo completo no storyboard). Sem travessões. Sentence case em
   português; caixa alta só em BUILD 2030 e labels.

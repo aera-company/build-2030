@@ -1,5 +1,5 @@
 import * as THREE from "three";
-import { C, radialTexture, std } from "../materials";
+import { C, std } from "../materials";
 import { L, type Built } from "./layout";
 
 /* ============================================================
@@ -45,8 +45,6 @@ export const buildSky = (): Built & { dome: THREE.Mesh } => {
           float band = (1.0 - smoothstep(-0.02, 0.15, h)) * smoothstep(-0.08, 0.0, h);
           col += sun * pow(s, 5.0) * band * 0.45;
           col += sun * pow(s, 14.0) * band * 0.4;
-          float disc = pow(max(dot(vDir, normalize(sunDir)), 0.0), 1400.0);
-          col += vec3(1.0, 0.86, 0.7) * disc * 0.0;
           gl_FragColor = vec4(col, 1.0);
         }`,
     }),
@@ -55,20 +53,12 @@ export const buildSky = (): Built & { dome: THREE.Mesh } => {
   dome.frustumCulled = false;
   group.add(dome);
 
-  // Halo do sol baixo, atrás da serra
-  const halo = new THREE.Sprite(
-    new THREE.SpriteMaterial({ map: radialTexture(), color: 0xf0a070, transparent: true, opacity: 0.32, blending: THREE.AdditiveBlending, depthWrite: false, fog: false }),
-  );
-  halo.scale.set(620, 620, 1);
-  halo.position.copy(SUN_DIR).multiplyScalar(2300);
-  group.add(halo);
-
   // Serra em duas silhuetas
   const ridge = (z: number, hmax: number, color: number, seed: number) => {
     const shape = new THREE.Shape();
-    const w = 5200;
+    const w = 9000;
     shape.moveTo(-w / 2, -40);
-    const n = 46;
+    const n = 80;
     for (let i = 0; i <= n; i++) {
       const x = -w / 2 + (i / n) * w;
       const a = Math.sin(i * 0.9 + seed) * 0.5 + Math.sin(i * 0.37 + seed * 2.1) * 0.35 + Math.sin(i * 2.3 + seed) * 0.15;

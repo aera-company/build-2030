@@ -101,5 +101,7 @@ export const sprite = (color: number, size: number, opacity = 0.5) => {
     new THREE.SpriteMaterial({ map: radialTexture(), color, transparent: true, opacity, blending: THREE.AdditiveBlending, depthWrite: false, fog: true }),
   );
   s.scale.set(size, size, 1);
+  // Desligados: o bloom faz o halo e os sprites viram quadrados pretos no passe de normais do GTAO.
+  s.visible = false;
   return s;
 };

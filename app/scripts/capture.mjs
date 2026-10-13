@@ -33,8 +33,8 @@ const browser = await puppeteer.launch({
 
 const page = await browser.newPage();
 const url = `${base}/?at=0&capture=1&support=${support}`;
-await page.goto(url, { waitUntil: "networkidle2", timeout: 120000 });
-await page.waitForFunction(() => window.__b2030 && window.__b2030.ready(), { timeout: 60000 });
+await page.goto(url, { waitUntil: "domcontentloaded", timeout: 120000 });
+await page.waitForFunction(() => window.__b2030 && window.__b2030.ready(), { timeout: 240000, polling: 500 });
 await new Promise((r) => setTimeout(r, 1200));
 
 for (const P of STEPS) {

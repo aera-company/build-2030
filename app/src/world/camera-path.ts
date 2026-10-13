@@ -80,7 +80,7 @@ export const atmosphereAt = (p: number) => {
   fog = lerp(fog, 0.0009, ramp(p, 0.52, 0.62));
   fog = lerp(fog, 0.00058, ramp(p, 0.8, 0.96));
   const fill = lerp(0, 0.55, ramp(p, 0.64, 0.74));
-  const exposure = lerp(1.5, 1.56, ramp(p, 0.9, 0.98));
+  const exposure = lerp(1.25, 1.3, ramp(p, 0.9, 0.98));
   const system = ramp(p, 0.64, 0.76, EASE.out);
   return { fog, fill, exposure, system };
 };

@@ -3,6 +3,9 @@ import { EffectComposer } from "three/addons/postprocessing/EffectComposer.js";
 import { RenderPass } from "three/addons/postprocessing/RenderPass.js";
 import { UnrealBloomPass } from "three/addons/postprocessing/UnrealBloomPass.js";
 import { OutputPass } from "three/addons/postprocessing/OutputPass.js";
+import { GTAOPass } from "three/addons/postprocessing/GTAOPass.js";
+import { ShaderPass } from "three/addons/postprocessing/ShaderPass.js";
+import { GradeShader } from "./grade";
 import { cameraAt, atmosphereAt, fovAt } from "./camera-path";
 import { C } from "./materials";
 import { ZONES, LINES } from "./moments";
@@ -24,7 +27,10 @@ import type { Built } from "./terminal/layout";
    se move, move-se desde o primeiro frame e nunca para.
    ============================================================ */
 
-const FOG = 0x1f2a48;
+const FOG = 0x2b3752;
+/** HDRI de entardecer (Poly Haven, CC0). Rotação alinha o sol do HDRI com SUN_DIR. */
+const ENV = "/env/industrial_sunset_02_ldr.jpg";
+const ENV_ROT = -1.67;
 
 export type Anchor = { id: string; x: number; y: number; visible: number; occluded: boolean };
 
@@ -34,6 +40,8 @@ export class World {
   camera: THREE.PerspectiveCamera;
   private composer: EffectComposer;
   private bloom: UnrealBloomPass;
+  private gtao: GTAOPass;
+  private envReady = false;
   private fog: THREE.FogExp2;
   private sun: THREE.DirectionalLight;
   private fill: THREE.DirectionalLight;
@@ -51,7 +59,7 @@ export class World {
   constructor(canvas: HTMLCanvasElement) {
     this.reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     this.renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: false, powerPreference: "high-performance", preserveDrawingBuffer: true });
-    this.renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 1.5));
+    this.renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 1.25));
     this.renderer.outputColorSpace = THREE.SRGBColorSpace;
     this.renderer.toneMapping = THREE.ACESFilmicToneMapping;
     this.renderer.toneMappingExposure = 1.0;
@@ -64,10 +72,19 @@ export class World {
     this.fog = new THREE.FogExp2(FOG, 0.0007);
     this.scene.fog = this.fog;
 
-    this.scene.add(new THREE.HemisphereLight(0x6479a3, 0x1a2432, 5.0));
-    this.scene.add(new THREE.AmbientLight(0x56688a, 0.9));
+    this.scene.add(new THREE.HemisphereLight(0x6479a3, 0x1a2432, 0.8));
+    this.scene.add(new THREE.AmbientLight(0x56688a, 0.2));
 
-    this.sun = new THREE.DirectionalLight(0xffb078, 3.8);
+    new THREE.TextureLoader().load(ENV, (tex) => {
+      tex.mapping = THREE.EquirectangularReflectionMapping;
+      tex.colorSpace = THREE.SRGBColorSpace;
+      this.scene.environment = tex;
+      this.scene.environmentIntensity = 1.1;
+      this.scene.environmentRotation.set(0, ENV_ROT, 0);
+      this.envReady = true;
+    });
+
+    this.sun = new THREE.DirectionalLight(0xffb078, 2.3);
     this.sun.castShadow = true;
     this.sun.shadow.mapSize.set(2048, 2048);
     const sc = this.sun.shadow.camera;
@@ -110,8 +127,15 @@ export class World {
 
     this.composer = new EffectComposer(this.renderer);
     this.composer.addPass(new RenderPass(this.scene, this.camera));
-    this.bloom = new UnrealBloomPass(new THREE.Vector2(1, 1), 0.38, 0.42, 1.0);
+    this.gtao = new GTAOPass(this.scene, this.camera, 1, 1);
+    this.gtao.output = GTAOPass.OUTPUT.Default;
+    this.gtao.blendIntensity = 0.85;
+    this.gtao.updateGtaoMaterial({ radius: 4, distanceExponent: 1, thickness: 1.5, scale: 1.1, samples: 12, distanceFallOff: 1, screenSpaceRadius: false });
+    this.gtao.updatePdMaterial({ lumaPhi: 10, depthPhi: 2, normalPhi: 3, radius: 4, radiusExponent: 1, rings: 2, samples: 12 });
+    this.composer.addPass(this.gtao);
+    this.bloom = new UnrealBloomPass(new THREE.Vector2(1, 1), 0.32, 0.4, 1.0);
     this.composer.addPass(this.bloom);
+    this.composer.addPass(new ShaderPass(GradeShader));
     this.composer.addPass(new OutputPass());
 
     this.resize();
@@ -120,11 +144,12 @@ export class World {
   resize() {
     const w = window.innerWidth;
     const h = window.innerHeight;
-    const dpr = Math.min(window.devicePixelRatio || 1, 1.5);
+    const dpr = Math.min(window.devicePixelRatio || 1, 1.25);
     this.renderer.setPixelRatio(dpr);
     this.renderer.setSize(w, h, false);
     this.composer.setPixelRatio(dpr);
     this.composer.setSize(w, h);
+    this.gtao.setSize(Math.round(w * dpr), Math.round(h * dpr));
     this.camera.aspect = w / h;
     this.camera.updateProjectionMatrix();
   }
@@ -147,17 +172,17 @@ export class World {
     this.fog.density = atm.fog;
     this.fill.intensity = atm.fill;
     this.renderer.toneMappingExposure = atm.exposure;
-    this.towerLight.intensity = 60 + atm.system * 160;
+    this.towerLight.intensity = 4 + atm.system * 14;
 
     // o sol acompanha o alvo (sombras nítidas onde a câmera olha); o céu acompanha a câmera
     this.sun.target.position.copy(this.camState.look);
     this.sun.position.copy(this.camState.look).addScaledVector(SUN_DIR, 900);
-    this.sky.dome.position.copy(this.camera.position);
 
+    this.sky.dome.position.copy(this.camera.position);
     this.parts.forEach((b) => b.update?.(tt, p, atm.system));
 
     this.composer.render();
-    this.readyFrames++;
+    if (this.envReady) this.readyFrames++;
   }
 
   /** Âncoras projetadas para as anotações HTML. */

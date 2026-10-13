@@ -1,6 +1,7 @@
 import * as THREE from "three";
 import { C, box, cyl, glow, sprite, std } from "../materials";
 import { L, type Built } from "./layout";
+import { pbr } from "../textures";
 
 /* ============================================================
    EDIFÍCIOS · galpões com docas acesas, torre de controle,
@@ -8,8 +9,9 @@ import { L, type Built } from "./layout";
    docas e janelas; a torre tem luz fria (é a Tecnologia).
    ============================================================ */
 
-const wallMat = std(C.wall, 0.9, 0.05);
-const roofMat = std(C.roof, 0.85, 0.08);
+let wallMat: THREE.MeshStandardMaterial;
+const wall = () => (wallMat ??= new THREE.MeshStandardMaterial({ color: 0x7c848e, roughness: 0.85, metalness: 0.25, ...pbr("corrugated_iron_02", [28, 2.4]), normalScale: new THREE.Vector2(0.7, 0.7) }));
+const roofMat = std(C.roof, 0.96, 0.02);
 const doorLit = glow(C.warm, 2.6, 0x1a1208);
 const doorDark = std(0x171b20, 0.9, 0.05);
 
@@ -18,7 +20,7 @@ const warehouse = (parent: THREE.Group, occ: THREE.Object3D[], x0: number, x1: n
   const d = z0 - z1;
   const cx = (x0 + x1) / 2;
   const cz = (z0 + z1) / 2;
-  const body = box(w, h, d, wallMat);
+  const body = box(w, h, d, wall());
   body.position.set(cx, h / 2, cz);
   parent.add(body);
   occ.push(body);
@@ -71,10 +73,10 @@ export const buildBuildings = (): Built & { towerLight: THREE.PointLight } => {
   shaft.position.set(tw.x, (tw.h - 8) / 2, tw.z);
   group.add(shaft);
   occluders.push(shaft);
-  const cabin = box(20, 7, 20, std(0x1b2b3b, 0.3, 0.5));
+  const cabin = box(20, 7, 20, std(0x1b2b3b, 0.75, 0.2));
   cabin.position.set(tw.x, tw.h - 4.5, tw.z);
   group.add(cabin);
-  const glass = new THREE.Mesh(new THREE.BoxGeometry(20.2, 3.2, 20.2), glow(0xbfe3f0, 1.5, 0x08202c));
+  const glass = new THREE.Mesh(new THREE.BoxGeometry(20.2, 3.2, 20.2), glow(0xbfe3f0, 1.1, 0x08202c));
   glass.position.set(tw.x, tw.h - 4.2, tw.z);
   group.add(glass);
   const roofT = box(22, 0.8, 22, roofMat);
@@ -91,8 +93,8 @@ export const buildBuildings = (): Built & { towerLight: THREE.PointLight } => {
   dish.rotation.z = Math.PI * 0.4;
   dish.position.set(tw.x - 7, tw.h + 2.4, tw.z + 6);
   group.add(dish);
-  const towerLight = new THREE.PointLight(0xbfe3f0, 0, 140, 1.8);
-  towerLight.position.set(tw.x, tw.h - 3, tw.z + 12);
+  const towerLight = new THREE.PointLight(0xbfe3f0, 0, 120, 2);
+  towerLight.position.set(tw.x, tw.h + 14, tw.z + 18);
   group.add(towerLight);
 
   // Portaria: cobertura sobre a via de trás, cabines, luz
@@ -119,7 +121,7 @@ export const buildBuildings = (): Built & { towerLight: THREE.PointLight } => {
     win.position.set(gt.x + dx, 2.2, gt.z);
     group.add(win);
   });
-  const admin = box(30, 9, 16, wallMat);
+  const admin = box(30, 9, 16, wall());
   admin.position.set(gt.x + 48, 4.5, gt.z - 14);
   group.add(admin);
   for (let r = 0; r < 2; r++) {
@@ -129,7 +131,7 @@ export const buildBuildings = (): Built & { towerLight: THREE.PointLight } => {
   }
 
   // Área técnica: tanques, subestação, campo solar (Green)
-  const tankMat = std(0x9da3a8, 0.5, 0.35);
+  const tankMat = std(0x8a9095, 0.7, 0.25);
   L.tanks.forEach((x) => {
     const t = cyl(11, 11, 12, tankMat, 24);
     t.position.set(x, 6, -112);
