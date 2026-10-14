@@ -30,7 +30,10 @@ export const GlyphWord: React.FC<{
   fill?: (i: number) => number;
   opacity?: (i: number) => number;
   stroke?: number;
-}> = ({word, size, color, draw = () => 1, fill = () => 1, opacity = () => 1, stroke = 1.4}) => {
+  /** deslocamento horizontal por glifo, em milésimos de em (tracking animado). */
+  offset?: (i: number) => number;
+  strokeColor?: string;
+}> = ({word, size, color, draw = () => 1, fill = () => 1, opacity = () => 1, stroke = 1.4, offset, strokeColor}) => {
   const w = DATA.words[word];
   const k = size / 1000;
   const pad = 200;
@@ -47,13 +50,13 @@ export const GlyphWord: React.FC<{
         const op = opacity(i);
         if (op <= 0) return null;
         return (
-          <g key={i} transform={`translate(${g.x} 0)`} opacity={op}>
+          <g key={i} transform={`translate(${g.x + (offset ? offset(i) : 0)} 0)`} opacity={op}>
             {fl > 0 ? <path d={g.d} fill={color} fillOpacity={fl} /> : null}
             {dr > 0 && fl < 1 ? (
               <path
                 d={g.d}
                 fill="none"
-                stroke={color}
+                stroke={strokeColor ?? color}
                 strokeWidth={stroke / k}
                 pathLength={1}
                 strokeDasharray="1 1"

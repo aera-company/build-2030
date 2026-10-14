@@ -1,5 +1,5 @@
 """
-Contornos vetoriais da Instrument Sans (instância 650 / wdth 90, a display aprovada do site),
+Contornos vetoriais da Mona Sans (instância wght 680 / wdth 112, a display N1 do filme V3),
 com kerning do GPOS e o tracking do filme (−0,045 em), para animar tipografia como linha:
 desenhar o contorno, morphing, extrair hastes, nós e réguas a partir das próprias letras.
 
@@ -21,6 +21,8 @@ WORDS = [
     'UMA GAVEA.', 'MÚLTIPLAS CAPACIDADES.', 'ONE STOP SHOP',
     'PLANEJAR.', 'PRIORIZAR.', 'CONECTAR.', 'ACOMPANHAR.',
     'DUAS FRENTES.', 'UMA MESMA DIREÇÃO.',
+    'MARCA.', 'PRESENÇA.', 'OPORTUNIDADES.', 'CONEXÃO.', 'INTELIGÊNCIA.',
+    'PROCESSOS.', 'CONHECIMENTO.', 'DECISÃO.', 'CONSTRUIR.', 'ESCALAR.', 'LIDERAR.', 'AERA',
 ]
 TRACKING = -0.02  # em, igual a displayStyle()
 
@@ -28,10 +30,10 @@ font = TTFont(SRC)
 axes = {a.axisTag: (a.minValue, a.maxValue) for a in font['fvar'].axes}
 loc = {}
 if 'wght' in axes:
-    loc['wght'] = 600
+    loc['wght'] = 680
 if 'wdth' in axes:
-    loc['wdth'] = 110
-font = instancer.instantiateVariableFont(font, loc)
+    loc['wdth'] = 112
+font = instancer.instantiateVariableFont(font, loc, overlap=instancer.OverlapMode.REMOVE)  # contornos fundidos: o modo contorno não mostra sobreposição
 upem = font['head'].unitsPerEm
 S = 1000 / upem
 cmap = font.getBestCmap()

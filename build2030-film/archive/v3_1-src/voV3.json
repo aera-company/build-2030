@@ -1,0 +1,422 @@
+{
+ "lines": {
+  "v01": {
+   "file": "audio/vo/v3_v01.wav",
+   "frames": 52,
+   "words": [
+    {
+     "w": "Um",
+     "f": 0
+    },
+    {
+     "w": "novo",
+     "f": 5
+    },
+    {
+     "w": "ciclo",
+     "f": 14
+    },
+    {
+     "w": "começa",
+     "f": 25
+    },
+    {
+     "w": "agora.",
+     "f": 37
+    }
+   ]
+  },
+  "v02": {
+   "file": "audio/vo/v3_v02.wav",
+   "frames": 54,
+   "words": [
+    {
+     "w": "E",
+     "f": 0
+    },
+    {
+     "w": "a",
+     "f": 3
+    },
+    {
+     "w": "próxima",
+     "f": 5
+    },
+    {
+     "w": "fase",
+     "f": 19
+    },
+    {
+     "w": "pede",
+     "f": 29
+    },
+    {
+     "w": "mais.",
+     "f": 38
+    }
+   ]
+  },
+  "v03": {
+   "file": "audio/vo/v3_v03.wav",
+   "frames": 62,
+   "words": [
+    {
+     "w": "Pede",
+     "f": 0
+    },
+    {
+     "w": "estrutura.",
+     "f": 8
+    },
+    {
+     "w": "Pede",
+     "f": 34
+    },
+    {
+     "w": "direção.",
+     "f": 44
+    }
+   ]
+  },
+  "v04": {
+   "file": "audio/vo/v3_v04.wav",
+   "frames": 88,
+   "words": [
+    {
+     "w": "A",
+     "f": 0
+    },
+    {
+     "w": "AERA",
+     "f": 4
+    },
+    {
+     "w": "propõe",
+     "f": 14
+    },
+    {
+     "w": "ocupar",
+     "f": 26
+    },
+    {
+     "w": "essa",
+     "f": 39
+    },
+    {
+     "w": "camada",
+     "f": 45
+    },
+    {
+     "w": "em",
+     "f": 57
+    },
+    {
+     "w": "duas",
+     "f": 61
+    },
+    {
+     "w": "frentes.",
+     "f": 69
+    }
+   ]
+  },
+  "v05": {
+   "file": "audio/vo/v3_v05.wav",
+   "frames": 162,
+   "words": [
+    {
+     "w": "Na",
+     "f": 0
+    },
+    {
+     "w": "marca",
+     "f": 6
+    },
+    {
+     "w": "e",
+     "f": 16
+    },
+    {
+     "w": "no",
+     "f": 18
+    },
+    {
+     "w": "marketing:",
+     "f": 22
+    },
+    {
+     "w": "posicionamento,",
+     "f": 45
+    },
+    {
+     "w": "design",
+     "f": 80
+    },
+    {
+     "w": "system,",
+     "f": 94
+    },
+    {
+     "w": "planejamento",
+     "f": 114
+    },
+    {
+     "w": "e",
+     "f": 136
+    },
+    {
+     "w": "critério.",
+     "f": 138
+    }
+   ]
+  },
+  "v06": {
+   "file": "audio/vo/v3_v06.wav",
+   "frames": 146,
+   "words": [
+    {
+     "w": "A",
+     "f": 0
+    },
+    {
+     "w": "agência",
+     "f": 2
+    },
+    {
+     "w": "segue",
+     "f": 13
+    },
+    {
+     "w": "no",
+     "f": 21
+    },
+    {
+     "w": "dia",
+     "f": 24
+    },
+    {
+     "w": "a",
+     "f": 29
+    },
+    {
+     "w": "dia.",
+     "f": 31
+    },
+    {
+     "w": "A",
+     "f": 47
+    },
+    {
+     "w": "AERA",
+     "f": 52
+    },
+    {
+     "w": "conecta",
+     "f": 59
+    },
+    {
+     "w": "direção,",
+     "f": 70
+    },
+    {
+     "w": "execução",
+     "f": 88
+    },
+    {
+     "w": "e",
+     "f": 105
+    },
+    {
+     "w": "aprovação",
+     "f": 108
+    },
+    {
+     "w": "com",
+     "f": 123
+    },
+    {
+     "w": "a",
+     "f": 127
+    },
+    {
+     "w": "diretoria.",
+     "f": 129
+    }
+   ]
+  },
+  "v07": {
+   "file": "audio/vo/v3_v07.wav",
+   "frames": 206,
+   "words": [
+    {
+     "w": "Em",
+     "f": 0
+    },
+    {
+     "w": "Novas",
+     "f": 4
+    },
+    {
+     "w": "Tecnologias:",
+     "f": 12
+    },
+    {
+     "w": "sistemas,",
+     "f": 36
+    },
+    {
+     "w": "IA,",
+     "f": 66
+    },
+    {
+     "w": "conhecimento",
+     "f": 81
+    },
+    {
+     "w": "e",
+     "f": 106
+    },
+    {
+     "w": "processos",
+     "f": 110
+    },
+    {
+     "w": "—",
+     "f": 128
+    },
+    {
+     "w": "do",
+     "f": 130
+    },
+    {
+     "w": "GAVEA",
+     "f": 134
+    },
+    {
+     "w": "Trade",
+     "f": 144
+    },
+    {
+     "w": "ao",
+     "f": 158
+    },
+    {
+     "w": "futuro",
+     "f": 163
+    },
+    {
+     "w": "Portal",
+     "f": 174
+    },
+    {
+     "w": "GAVEA.",
+     "f": 192
+    }
+   ]
+  },
+  "v08": {
+   "file": "audio/vo/v3_v08.wav",
+   "frames": 110,
+   "words": [
+    {
+     "w": "Para",
+     "f": 0
+    },
+    {
+     "w": "comunicar",
+     "f": 5
+    },
+    {
+     "w": "melhor,",
+     "f": 18
+    },
+    {
+     "w": "decidir",
+     "f": 35
+    },
+    {
+     "w": "melhor",
+     "f": 48
+    },
+    {
+     "w": "e",
+     "f": 60
+    },
+    {
+     "w": "operar",
+     "f": 64
+    },
+    {
+     "w": "com",
+     "f": 74
+    },
+    {
+     "w": "mais",
+     "f": 80
+    },
+    {
+     "w": "inteligência.",
+     "f": 88
+    }
+   ]
+  },
+  "v09": {
+   "file": "audio/vo/v3_v09.wav",
+   "frames": 67,
+   "words": [
+    {
+     "w": "Duas",
+     "f": 0
+    },
+    {
+     "w": "frentes.",
+     "f": 10
+    },
+    {
+     "w": "Uma",
+     "f": 32
+    },
+    {
+     "w": "mesma",
+     "f": 40
+    },
+    {
+     "w": "direção.",
+     "f": 50
+    }
+   ]
+  },
+  "v10": {
+   "file": "audio/vo/v3_v10.wav",
+   "frames": 92,
+   "words": [
+    {
+     "w": "Construir.",
+     "f": 0
+    },
+    {
+     "w": "Escalar.",
+     "f": 41
+    },
+    {
+     "w": "Liderar.",
+     "f": 67
+    }
+   ]
+  },
+  "v11": {
+   "file": "audio/vo/v3_v11.wav",
+   "frames": 33,
+   "words": [
+    {
+     "w": "Vamos",
+     "f": 0
+    },
+    {
+     "w": "construir?",
+     "f": 12
+    }
+   ]
+  }
+ }
+}
